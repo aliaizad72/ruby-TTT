@@ -1,12 +1,28 @@
 # frozen_string_literal: true
 
-# Introduce the game and the rules
-puts 'Welcome to Tic-Tac-Toe!'
-# Getting names from the players
-print 'Player 1, enter your name: '
-player_1_name = gets.chomp
-print 'Player 2, enter your name: '
-player_2_name = gets.chomp
+# class Player to manage the relevant data of each players in the game
+class Player
+  attr_reader :name, :symbol
+
+  def initialize(name, symbol)
+    @name = name
+    @symbol = symbol
+  end
+end
+
+# class IO to manage the flow of the game, I0 = input/output
+class IO
+  # Introduce the game and the rules
+  def intro
+    puts 'Welcome to Tic-Tac-Toe!'
+  end
+
+  # Getting names from the players
+  def ask_name(player_num)
+    print "Player #{player_num}, enter your name: "
+    gets.chomp
+  end
+end
 # Randomising symbol for each player
 symbols = %w[X O]
 player_1_symbol = symbols.delete(symbols.sample)
@@ -28,7 +44,5 @@ def display(array)
   end
 end
 display current_game
-# Conditions that will end the game
-# 1. Row complete
-# 2. Column complete
-# 3. Diagonal complete
+# Play the game
+# Check which player's turn is it
