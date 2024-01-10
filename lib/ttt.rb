@@ -51,6 +51,43 @@ class Board
   def play
     display
   end
+
+  def winner?
+    row_win? || column_win? || diagonal_win?
+  end
+
+  def row_win?
+    result = false
+    row_win_first_index = [0, 3, 6]
+    row_win_first_index.each do |index|
+      return true if state[index] == state[index + 1] && state[index] == state[index + 2]
+    end
+    result
+  end
+
+  def column_win?
+    result = false
+    column_win_first_index = [0, 1, 2]
+    column_win_first_index.each do |index|
+      return true if state[index] == state[index + 3] && state[index] && state[index + 6]
+    end
+    result
+  end
+
+  def diagonal_win?
+    result = false
+    return true if first_diag_win_condition || second_diag_win_condition
+
+    result
+  end
+
+  def first_diag_win_condition
+    state[4] == state[0] && state[4] == state[8]
+  end
+
+  def second_diag_win_condition
+    state[4] == state[2] && state[4] == state[6]
+  end
 end
 
 # class Game to manage the flow of the game
@@ -66,6 +103,3 @@ class Game
     puts 'Welcome to Tic-Tac-Toe!'
   end
 end
-
-Game.new.play
-
