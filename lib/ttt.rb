@@ -16,14 +16,36 @@ class Player
   end
 
   # Getting symbols from the players
-  def ask_symbol
-    print 'Enter your preferred symbol: '
-    gets.chomp
+  def ask_symbol # rubocop:disable Metrics/MethodLength
+    symbol = 'Placeholder == false' # This is a dummy value to make the loop below run
+    i = 0
+    # Error handling
+    while symbol.length > 1
+      if i.zero?
+        print 'Enter your preferred symbol: '
+      else
+        print 'Please enter one character only!. Enter again: '
+      end
+      symbol = gets.chomp
+      i += 1
+    end
+    symbol
   end
 
-  def choice
-    print "#{name}, enter your choice on the board (1 to 9): "
-    gets.chomp.to_i
+  def choice # rubocop:disable Metrics/MethodLength
+    player_choice = 'Placeholder == false'.to_i # This is a dummy value to make the loop below runs
+    i = 0
+    # Error handling
+    until player_choice.positive? && player_choice < 10
+      if i.zero?
+        print "#{name}, enter your choice on the board (1 to 9): "
+      else
+        print 'Please enter a number from 1 to 9! Enter again: '
+      end
+      player_choice = gets.chomp.to_i
+      i += 1
+    end
+    player_choice
   end
 
   def announce_winner
@@ -51,8 +73,8 @@ class Board
 
   def play
     display
-    take_choice until game_over?
-    announce_draw if draw?
+    ask_player_choice until game_over?
+    announce_draw if draw? && !winner?
   end
 
   # Method to output the current game to the user
@@ -63,14 +85,13 @@ class Board
     end
   end
 
-  def take_choice
+  def ask_player_choice
     players.each do |player|
-      next if game_over?
-
       index = player.choice - 1
       array[index] = player.symbol
       display
       player.announce_winner if winner?
+      break if game_over?
     end
   end
 
