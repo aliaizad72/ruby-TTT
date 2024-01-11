@@ -20,6 +20,11 @@ class Player
     print 'Enter your preferred symbol: '
     gets.chomp
   end
+
+  def choice
+    print "#{name}, enter your choice on the board (1 to 9): "
+    gets.chomp.to_i
+  end
 end
 
 # class Board to handle the operations and data needed to play the game
@@ -37,25 +42,31 @@ class Board
       print "Player #{i + 1}, "
       players.push(Player.new)
     end
-    players
+    players.shuffle # Shuffle to randomise their turn
   end
 
   # Method to output the current game to the user
   def display
-    state.each do |pos|
-      print " #{pos} "
-      print "\n" if (pos % 3).zero?
+    state.each_index do |index|
+      print " #{state[index]} "
+      print "\n" if [2, 5, 8].include?(index)
     end
   end
 
   def play
     display
+    players.each do |player|
+      index = player.choice - 1
+      state[index] = player.symbol
+      display
+    end
   end
 
   def winner?
     row_win? || column_win? || diagonal_win?
   end
 
+  # Tested
   def row_win?
     result = false
     row_win_first_index = [0, 3, 6]
@@ -65,15 +76,17 @@ class Board
     result
   end
 
+  # Tested
   def column_win?
     result = false
     column_win_first_index = [0, 1, 2]
     column_win_first_index.each do |index|
-      return true if state[index] == state[index + 3] && state[index] && state[index + 6]
+      return true if state[index] == state[index + 3] && state[index] == state[index + 6]
     end
     result
   end
 
+  # Tested
   def diagonal_win?
     result = false
     return true if first_diag_win_condition || second_diag_win_condition
@@ -95,7 +108,8 @@ class Game
   # The whole game flow is here
   def play
     intro
-    Board.new.play
+    current_board = Board.new
+    current_board.play
   end
 
   # Introduce the game and the rules
@@ -103,3 +117,5 @@ class Game
     puts 'Welcome to Tic-Tac-Toe!'
   end
 end
+
+Game.new.play
