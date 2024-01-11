@@ -25,15 +25,19 @@ class Player
     print "#{name}, enter your choice on the board (1 to 9): "
     gets.chomp.to_i
   end
+
+  def announce_winner
+    puts "#{name}, you won the game!"
+  end
 end
 
 # class Board to handle the operations and data needed to play the game
 class Board
-  attr_accessor :players, :state
+  attr_accessor :players, :array
 
   def initialize
     @players = add_players
-    @state = (1..9).to_a # A place to store the current ongoing game
+    @array = (1..9).to_a # A place to store the current ongoing game
   end
 
   def add_players
@@ -45,23 +49,36 @@ class Board
     players.shuffle # Shuffle to randomise their turn
   end
 
+  def play
+    display
+    take_choice until game_over?
+    announce_draw if draw?
+  end
+
   # Method to output the current game to the user
   def display
-    state.each_index do |index|
-      print " #{state[index]} "
+    array.each_index do |index|
+      print " #{array[index]} "
       print "\n" if [2, 5, 8].include?(index)
     end
   end
 
-  def play
-    display
+  def take_choice
     players.each do |player|
+      next if game_over?
+
       index = player.choice - 1
-      state[index] = player.symbol
+      array[index] = player.symbol
       display
+      player.announce_winner if winner?
     end
   end
 
+  def game_over?
+    winner? || draw?
+  end
+
+  # to check if there is a winner
   def winner?
     row_win? || column_win? || diagonal_win?
   end
@@ -71,7 +88,7 @@ class Board
     result = false
     row_win_first_index = [0, 3, 6]
     row_win_first_index.each do |index|
-      return true if state[index] == state[index + 1] && state[index] == state[index + 2]
+      return true if array[index] == array[index + 1] && array[index] == array[index + 2]
     end
     result
   end
@@ -81,7 +98,7 @@ class Board
     result = false
     column_win_first_index = [0, 1, 2]
     column_win_first_index.each do |index|
-      return true if state[index] == state[index + 3] && state[index] == state[index + 6]
+      return true if array[index] == array[index + 3] && array[index] == array[index + 6]
     end
     result
   end
@@ -95,11 +112,20 @@ class Board
   end
 
   def first_diag_win_condition
-    state[4] == state[0] && state[4] == state[8]
+    array[4] == array[0] && array[4] == array[8]
   end
 
   def second_diag_win_condition
-    state[4] == state[2] && state[4] == state[6]
+    array[4] == array[2] && array[4] == array[6]
+  end
+
+  def draw?
+    players_symbols = players.map(&:symbol)
+    array.all? { |position| players_symbols.include?(position) }
+  end
+
+  def announce_draw
+    puts 'Nobody wins, game ends in a draw.'
   end
 end
 
