@@ -60,15 +60,6 @@ class Board
     @winner = nil
   end
 
-  def add_players
-    players = []
-    2.times do |i|
-      print "Player #{i + 1}, "
-      players.push(Player.new)
-    end
-    players.shuffle # Shuffle to randomise their turn
-  end
-
   def play
     display_array
     ask_player_choice until game_over?
@@ -78,6 +69,23 @@ class Board
     elsif full? && !winner?
       announce_draw
     end
+  end
+
+  def reset
+    @players = @players.shuffle # Randomising the turns for the new game
+    @array = (1..9).to_a
+    @winner = nil
+  end
+
+  private
+
+  def add_players
+    players = []
+    2.times do |i|
+      print "Player #{i + 1}, "
+      players.push(Player.new)
+    end
+    players.shuffle # Shuffle to randomise their turn
   end
 
   # Method to output the current game to the user
@@ -160,19 +168,24 @@ class Board
   end
 end
 
-# class Game to manage the flow of the game
-class Game
+# class TicTacToe to manage the flow of the game
+class TicTacToe
   # The whole game flow is here
-  def play
-    intro
-    current_board = Board.new
-    current_board.play
+  def self.play
+    puts 'Welcome to Tic-Tac-Toe! Who goes first are randomised.'
+    board = Board.new
+    board.play
+    while play_again?
+      board.reset
+      board.play
+    end
+    puts 'Goodbye!'
   end
 
-  # Introduce the game and the rules
-  def intro
-    puts 'Welcome to Tic-Tac-Toe! Who goes first are randomised.'
+  def self.play_again?
+    print 'Do you want to play again? (y/n): '
+    gets.chomp == 'y'
   end
 end
 
-Game.new.play
+TicTacToe.play
