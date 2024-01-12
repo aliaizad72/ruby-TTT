@@ -33,7 +33,7 @@ class Player
   end
 
   def choice # rubocop:disable Metrics/MethodLength
-    player_choice = 'Placeholder == false'.to_i # This is a dummy value to make the loop below runs
+    player_choice = 'Placeholder == false'.to_i # This is a dummy value to make the loop below run
     i = 0
     # Error handling
     until player_choice.positive? && player_choice < 10
@@ -47,19 +47,16 @@ class Player
     end
     player_choice
   end
-
-  def announce_winner
-    puts "#{name}, you won the game!"
-  end
 end
 
 # class Board to handle the operations and data needed to play the game
 class Board
-  attr_accessor :players, :array
+  attr_accessor :players, :array, :winner
 
   def initialize
     @players = add_players
     @array = (1..9).to_a # A place to store the current ongoing game
+    @winner = nil
   end
 
   def add_players
@@ -72,13 +69,18 @@ class Board
   end
 
   def play
-    display
+    display_array
     ask_player_choice until game_over?
-    announce_draw if draw? && !winner?
+
+    if winner?
+      announce_winner
+    elsif full? && !winner?
+      announce_draw
+    end
   end
 
   # Method to output the current game to the user
-  def display
+  def display_array
     array.each_index do |index|
       print " #{array[index]} "
       print "\n" if [2, 5, 8].include?(index)
@@ -89,14 +91,14 @@ class Board
     players.each do |player|
       index = player.choice - 1
       array[index] = player.symbol
-      display
-      player.announce_winner if winner?
+      display_array
+      @winner = player.name if winner?
       break if game_over?
     end
   end
 
   def game_over?
-    winner? || draw?
+    winner? || full?
   end
 
   # to check if there is a winner
@@ -140,9 +142,13 @@ class Board
     array[4] == array[2] && array[4] == array[6]
   end
 
-  def draw?
+  def full?
     players_symbols = players.map(&:symbol)
     array.all? { |position| players_symbols.include?(position) }
+  end
+
+  def announce_winner
+    puts "#{winner}, you won the game!"
   end
 
   def announce_draw
