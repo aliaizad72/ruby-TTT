@@ -56,6 +56,7 @@ class Board
   def initialize
     @players = add_players
     @array = (1..9).to_a # A place to store the current ongoing game
+    @players_symbols = players.map(&:symbol)
     @winner = nil
   end
 
@@ -87,9 +88,14 @@ class Board
     end
   end
 
-  def ask_player_choice
+  def ask_player_choice # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     players.each do |player|
       index = player.choice - 1
+      # To make sure player play an index that has not been taken
+      while @players_symbols.include?(array[index])
+        puts 'This position is occupied. Try another position.'
+        index = player.choice - 1
+      end
       array[index] = player.symbol
       display_array
       @winner = player.name if winner?
@@ -101,12 +107,10 @@ class Board
     winner? || full?
   end
 
-  # to check if there is a winner
   def winner?
     row_win? || column_win? || diagonal_win?
   end
 
-  # Tested
   def row_win?
     result = false
     row_win_first_index = [0, 3, 6]
@@ -116,7 +120,6 @@ class Board
     result
   end
 
-  # Tested
   def column_win?
     result = false
     column_win_first_index = [0, 1, 2]
@@ -126,7 +129,6 @@ class Board
     result
   end
 
-  # Tested
   def diagonal_win?
     result = false
     return true if first_diag_win_condition || second_diag_win_condition
@@ -143,8 +145,7 @@ class Board
   end
 
   def full?
-    players_symbols = players.map(&:symbol)
-    array.all? { |position| players_symbols.include?(position) }
+    array.all? { |position| @players_symbols.include?(position) }
   end
 
   def announce_winner
