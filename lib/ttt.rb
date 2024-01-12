@@ -82,10 +82,12 @@ class Board
 
   # Method to output the current game to the user
   def display_array
+    print "\n" # To make it easier on the eye
     array.each_index do |index|
       print " #{array[index]} "
       print "\n" if [2, 5, 8].include?(index)
     end
+    print "\n"
   end
 
   def ask_player_choice # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -94,6 +96,7 @@ class Board
       # To make sure player play an index that has not been taken
       while @players_symbols.include?(array[index])
         puts 'This position is occupied. Try another position.'
+        print "\n"
         index = player.choice - 1
       end
       array[index] = player.symbol
@@ -168,7 +171,7 @@ class Game
 
   # Introduce the game and the rules
   def intro
-    puts 'Welcome to Tic-Tac-Toe!'
+    puts 'Welcome to Tic-Tac-Toe! Who goes first are randomised.'
   end
 end
 
