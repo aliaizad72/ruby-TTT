@@ -4,6 +4,7 @@
 class Player
   attr_reader :name, :symbol
 
+# make it easier to test with mock params
   def initialize(name = ask_name, symbol = ask_symbol)
     @name = name
     @symbol = symbol
