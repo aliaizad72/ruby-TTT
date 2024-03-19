@@ -43,4 +43,17 @@ describe Player do # rubocop:disable Metrics/BlockLength
       end
     end
   end
+
+  describe '#choose_condition' do
+    subject(:player_choose) { described_class.new('Aku', 'X') }
+    it 'returns true if valid input' do
+      valid_input = 5
+      expect(player_choose.choose_condition(valid_input)).to be true
+    end
+
+    it 'returns false if invalid input' do
+      invalid_input = 20
+      expect(player_choose.choose_condition(invalid_input)).to be false
+    end
+  end
 end

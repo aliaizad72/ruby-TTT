@@ -4,7 +4,7 @@
 class Player
   attr_reader :name, :symbol
 
-# make it easier to test with mock params
+  # make it easier to test with mock params
   def initialize(name = ask_name, symbol = ask_symbol)
     @name = name
     @symbol = symbol
@@ -30,17 +30,16 @@ class Player
 
   def choose # rubocop:disable Metrics/MethodLength
     player_choice = 'Placeholder == false'.to_i # This is a dummy value to make the loop below run
-    i = 0
     # Error handling
-    until player_choice.positive? && player_choice < 10
-      if i.zero?
-        print "#{name}, enter your choice on the board (1 to 9): "
-      else
-        print 'Please enter a number from 1 to 9! Enter again: '
-      end
+    until choose_condition(player_choice)
+      print "#{name}, enter your choice on the board (1 to 9): "
       player_choice = gets.chomp.to_i
-      i += 1
+      print 'Please enter a number from 1 to 9! Enter again below!' if choose_condition(player_choice) == false
     end
     player_choice
+  end
+
+  def choose_condition(player_choice)
+    player_choice.positive? && player_choice < 10
   end
 end
