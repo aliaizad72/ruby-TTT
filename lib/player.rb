@@ -27,7 +27,7 @@ class Player
     symbol
   end
 
-  def choice # rubocop:disable Metrics/MethodLength
+  def choose # rubocop:disable Metrics/MethodLength
     player_choice = 'Placeholder == false'.to_i # This is a dummy value to make the loop below run
     i = 0
     # Error handling

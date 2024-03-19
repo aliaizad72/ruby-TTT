@@ -51,12 +51,12 @@ class Board
 
   def ask_player_choice # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     players.each do |player|
-      index = player.choice - 1
+      index = player.choose - 1
       # To make sure player play an index that has not been taken
       while @players_symbols.include?(array[index])
         puts 'This position is occupied. Try another position.'
         print "\n"
-        index = player.choice - 1
+        index = player.choose - 1
       end
       array[index] = player.symbol
       display_array
