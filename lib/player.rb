@@ -4,9 +4,9 @@
 class Player
   attr_reader :name, :symbol
 
-  def initialize
-    @name = ask_name
-    @symbol = ask_symbol
+  def initialize(name = ask_name, symbol = ask_symbol)
+    @name = name
+    @symbol = symbol
   end
 
   # Getting names from the players
@@ -16,18 +16,13 @@ class Player
   end
 
   # Getting symbols from the players
-  def ask_symbol # rubocop:disable Metrics/MethodLength
+  def ask_symbol
     symbol = 'Placeholder == false' # This is a dummy value to make the loop below run
-    i = 0
     # Error handling
-    while symbol.length > 1
-      if i.zero?
-        print 'Enter your preferred symbol: '
-      else
-        print 'Please enter one character only!. Enter again: '
-      end
+    until symbol.length == 1
+      print 'Enter your preferred symbol: '
       symbol = gets.chomp
-      i += 1
+      puts 'Please enter one character only!. Enter again below!' if symbol.length > 1
     end
     symbol
   end
