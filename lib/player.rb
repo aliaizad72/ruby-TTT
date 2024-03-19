@@ -28,18 +28,16 @@ class Player
     symbol
   end
 
-  def choose # rubocop:disable Metrics/MethodLength
+  def choose
     player_choice = 'Placeholder == false'.to_i # This is a dummy value to make the loop below run
     # Error handling
-    until choose_condition(player_choice)
+    until player_choice.positive? && player_choice < 10
       print "#{name}, enter your choice on the board (1 to 9): "
       player_choice = gets.chomp.to_i
-      print 'Please enter a number from 1 to 9! Enter again below!' if choose_condition(player_choice) == false
+      if (player_choice.positive? && player_choice < 10) == false
+        puts 'Please enter a number from 1 to 9! Enter again below!'
+      end
     end
     player_choice
-  end
-
-  def choose_condition(player_choice)
-    player_choice.positive? && player_choice < 10
   end
 end

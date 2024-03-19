@@ -44,16 +44,35 @@ describe Player do # rubocop:disable Metrics/BlockLength
     end
   end
 
-  describe '#choose_condition' do
+  describe '#choose' do
     subject(:player_choose) { described_class.new('Aku', 'X') }
-    it 'returns true if valid input' do
-      valid_input = 5
-      expect(player_choose.choose_condition(valid_input)).to be true
+
+    context 'with valid input' do
+      before do
+        allow(player_choose).to receive(:gets).and_return('5')
+      end
+
+      it 'outputs the input prompt once' do
+        name = player_choose.instance_variable_get(:@name)
+        input_prompt = "#{name}, enter your choice on the board (1 to 9): "
+        expect(player_choose).to receive(:print).with(input_prompt).once
+        player_choose.choose
+      end
     end
 
-    it 'returns false if invalid input' do
-      invalid_input = 20
-      expect(player_choose.choose_condition(invalid_input)).to be false
+    context 'with one invalid input' do
+      before do
+        allow(player_choose).to receive(:gets).and_return('-1', '5')
+      end
+
+      it 'outputs the input prompt twice' do
+        name = player_choose.instance_variable_get(:@name)
+        input_prompt = "#{name}, enter your choice on the board (1 to 9): "
+        error_prompt = 'Please enter a number from 1 to 9! Enter again below!'
+        expect(player_choose).to receive(:print).with(input_prompt).twice
+        expect(player_choose).to receive(:puts).with(error_prompt).once
+        player_choose.choose
+      end
     end
   end
 end
