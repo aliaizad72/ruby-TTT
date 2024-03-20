@@ -5,10 +5,21 @@ class Board
   attr_accessor :players, :array, :winner
 
   def initialize
-    @players = add_players
+    @players = Board.add_players
     @array = (1..9).to_a # A place to store the current ongoing game
     @players_symbols = players.map(&:symbol)
     @winner = nil
+  end
+
+  def self.add_players
+    players = []
+    2.times do |i|
+      name = Player.ask_name(i)
+      symbol = Player.ask_symbol
+      player = Player.new(name, symbol)
+      players.push(player)
+    end
+    players.shuffle # Shuffle to randomise their turn
   end
 
   def play
@@ -29,17 +40,6 @@ class Board
   end
 
   private
-
-  def add_players
-    players = []
-    2.times do |i|
-      name = Player.ask_name(i)
-      symbol = Player.ask_symbol
-      player = Player.new(name, symbol)
-      players.push(player)
-    end
-    players.shuffle # Shuffle to randomise their turn
-  end
 
   # Method to output the current game to the user
   def display_array
