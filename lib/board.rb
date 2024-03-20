@@ -33,8 +33,10 @@ class Board
   def add_players
     players = []
     2.times do |i|
-      print "Player #{i + 1}, "
-      players.push(Player.new)
+      name = Player.ask_name(i)
+      symbol = Player.ask_symbol
+      player = Player.new(name, symbol)
+      players.push(player)
     end
     players.shuffle # Shuffle to randomise their turn
   end

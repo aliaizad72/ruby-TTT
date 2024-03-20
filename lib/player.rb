@@ -11,13 +11,13 @@ class Player
   end
 
   # Getting names from the players
-  def ask_name
-    print 'enter your name: '
+  def self.ask_name(player_num)
+    print "Player #{player_num + 1}, enter your name: "
     gets.chomp
   end
 
   # Getting symbols from the players
-  def ask_symbol
+  def self.ask_symbol
     symbol = 'Placeholder == false' # This is a dummy value to make the loop below run
     # Error handling
     until symbol.length == 1
