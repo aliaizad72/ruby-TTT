@@ -51,13 +51,12 @@ class Board
     print "\n"
   end
 
-  def ask_player_choice # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def ask_player_choice # rubocop:disable Metrics/MethodLength
     players.each do |player|
       index = player.choose - 1
       # To make sure player play an index that has not been taken
-      while @players_symbols.include?(array[index])
-        puts 'This position is occupied. Try another position.'
-        print "\n"
+      while space_occupied?(index)
+        puts "This position is occupied. Try another position.\n\n"
         index = player.choose - 1
       end
       array[index] = player.symbol
@@ -65,6 +64,10 @@ class Board
       @winner = player.name if winner?
       break if game_over?
     end
+  end
+
+  def space_occupied?(index)
+    @players_symbols.include?(@array[index])
   end
 
   def game_over?
