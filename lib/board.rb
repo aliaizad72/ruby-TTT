@@ -98,16 +98,16 @@ class Board
 
   def diagonal_win?
     result = false
-    return true if first_diag_win_condition || second_diag_win_condition
+    return true if first_diag? || second_diag?
 
     result
   end
 
-  def first_diag_win_condition
+  def first_diag?
     array[4] == array[0] && array[4] == array[8]
   end
 
-  def second_diag_win_condition
+  def second_diag?
     array[4] == array[2] && array[4] == array[6]
   end
 
