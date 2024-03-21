@@ -4,8 +4,8 @@
 class Board
   attr_accessor :players, :array, :winner
 
-  def initialize
-    @players = Board.add_players
+  def initialize(players = Board.add_players)
+    @players = players
     @array = (1..9).to_a # A place to store the current ongoing game
     @players_symbols = players.map(&:symbol)
     @winner = nil
