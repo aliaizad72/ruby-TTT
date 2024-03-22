@@ -161,4 +161,26 @@ describe Board do # rubocop:disable Metrics/BlockLength
       end
     end
   end
+
+  describe '#reset' do
+    subject(:board_reset) { described_class.new(players) }
+    context 'when called reset instance variables (except players_symbols) to init values' do
+      it 'shuffles @players' do
+        # omit test because shuffle is a build in method
+      end
+
+      it 'changes @array to original' do
+        game_array = ['X', 2, 3, 4, 5, 6, 7, 8, 9]
+        board_reset.array = game_array
+        original = (1..9).to_a
+        expect { board_reset.reset }.to change { board_reset.array }.from(game_array).to(original)
+      end
+
+      it 'changes @winner to nil' do
+        player_one = board_reset.players[0]
+        board_reset.winner = player_one
+        expect { board_reset.reset }.to change { board_reset.winner }.from(player_one).to(nil)
+      end
+    end
+  end
 end
